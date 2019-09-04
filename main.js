@@ -1,8 +1,13 @@
-let fakeDataBase = [
-    {id:1, task: "Gå och handla", ready:false},
-    {id:2, task: "Gå och sporta", ready:false},
-    {id:3, task: "Gå och håll någon i handen", ready:false}
-];
+let fakeDataBase;
+
+if(localStorage.getItem("todo2019"))
+{
+    fakeDataBase = JSON.parse(localStorage.getItem("todo2019"));
+}
+else{
+    fakeDataBase = [];
+}
+ 
 
 let order = true;
 
@@ -18,6 +23,9 @@ function changeOrder(){
 renderFakeData();
 
 function renderFakeData(){
+
+  console.log(fakeDataBase);
+
     // skapa html från vår fakeDataBase
     let htmlOutput = fakeDataBase.map(function(taskObject,index){
         console.log(index);
@@ -58,8 +66,12 @@ function addTask(event){
         let taskObject = {id: Date.now() ,task:inputText, ready:false}
         // spara i fakeDataBase
         fakeDataBase.push(taskObject);
+        
         // rendera på nytt
         renderFakeData();
+
+          // spara lokalt
+          saveLocal();
     }
     _id("taskId").value = "";
     _id("taskId").focus();
@@ -71,6 +83,8 @@ function deleteTask(index){
 
   fakeDataBase.splice(index,1);
   renderFakeData();
+  // spara lokalt
+  saveLocal();
 
 }
 
@@ -78,8 +92,15 @@ function doneTask(index){
 
     fakeDataBase[index].ready = !fakeDataBase[index].ready;
     renderFakeData();
+      // spara lokalt
+      saveLocal();
+
+}
 
 
+function saveLocal()
+{
+    localStorage.setItem("todo2019",JSON.stringify(fakeDataBase));
 }
 
 
